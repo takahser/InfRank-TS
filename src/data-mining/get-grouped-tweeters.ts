@@ -37,7 +37,8 @@ const findAuthors = async (db, callback) => {
     {
       '$match': {
         "rawTweet.lang": "en",
-        "rawTweet.retweeted_status.created_at": { "$exists": false }
+        "rawTweet.retweeted_status.created_at": { "$exists": false },
+        "rawTweet.user.verified": true
       }
     },
     {
