@@ -14,11 +14,18 @@ MongoClient.connect((url), async (err, client) => {
   const db = client.db(dbName);
 
   const authors = await findAuthors(db, docs => {});
-  console.log("TCL: authors", authors)
+
+  const authorsWithUrls = authors.map(a => ({
+    userName: a._id,
+    numberOfTweets: a.numberOfTweets,
+    url: `https://twitter.com/${a._id}`
+  }));
+
+  console.log("TCL: authors", authorsWithUrls)
 
   const file = './out/authors.json';
 
-  jsonfile.writeFile(file, authors, err => {
+  jsonfile.writeFile(file, authorsWithUrls, err => {
     if (err) console.error(err);
   });
 
