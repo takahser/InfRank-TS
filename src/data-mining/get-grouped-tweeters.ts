@@ -54,6 +54,9 @@ const findAuthors = async (db, callback) => {
           "$sum": { "$size": "$tweets" }
        }
      }
+    },
+    {
+      "$sort": { "numberOfTweets": -1 }
     }
   ]).toArray();
   return authors;
