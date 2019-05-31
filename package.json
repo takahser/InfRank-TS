@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "exportAuthors": "npm run build && node src/data-mining/get-grouped-tweeters.js",
+    "exportAuthors": "npm run build && node src/data-mining/get-grouped-tweeters.js && json2csv -i ./out/authors.json -f _id,numberOfTweets > ./out/authors.csv",
     "build": "tsc"
   },
   "author": "takahser",
   "license": "MIT",
   "dependencies": {
+    "json2csv": "^4.5.1",
+    "jsonfile": "^5.0.0",
     "mongodb": "^3.2.6"
   }
 }
