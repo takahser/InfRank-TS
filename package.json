@@ -1,0 +1,16 @@
+{
+  "name": "infrank",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "exportAuthors": "npm run build && node src/data-mining/get-grouped-tweeters.js",
+    "build": "tsc"
+  },
+  "author": "takahser",
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^3.2.6"
+  }
+}
