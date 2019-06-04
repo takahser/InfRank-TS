@@ -2,41 +2,29 @@
 /**
  * global variables
  */
-const allVertices: Vertice[] = [];
+const edges: Association[] = [];
+const tweets: Tweet[] = [];
+const retweetEdges: Association[] = tweets
+  .flatMap(t =>
+    t.retweeter.map(
+        r => ({
+          source: r,
+          target: t.author,
+          label: AssociationType.Retweeting,
+        })
+      ))
 
 /**
- * data structures
+ * methods
  */
-// source ~ u_i
-// target ~ u_j
-enum Label {
-  Following, // source follows target
-  Retweeting, // source retweets target
-  Metioning, // source mentions target
-}
+const O = (author: Author, label: AssociationType) => edges
+  .filter(e => e.source === author && e.label === label)
 
-interface Vertice {}
+const I = (author: Author, label: AssociationType) => edges
+  .filter(e => e.target === author && e.label === label)
 
-/**
- * static methods
- */
+const T = (author: Author) => tweets
+  .filter(t => t.author === author)
 
-const ivan = (vertice: Vertice, label: Label): Vertice[] => {
-  // TODO: get all vertices that match relationship instead
-  return allVertices;
-}
-
-const sizeOf = (vertices: Vertice[]): number => vertices.length;
-
-const calcInfK = (vertice: Vertice) =>
-  sizeOf(
-    ivan(
-      vertice,
-      Label.Following,
-    )
-  ) / sizeOf(allVertices)
-
-// w_r a.k.a. "retweeting" relationship
-// const basil = (source: Vertice, target: Vertice) => 
-
-// 
+const R = (source: Author, target: Author): Association[] => retweetEdges
+  .filter(r => r.source === source && r.target === target)
