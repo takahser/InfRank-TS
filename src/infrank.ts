@@ -3,7 +3,9 @@
  * global variables
  */
 const edges: Association[] = [];
+
 const tweets: Tweet[] = [];
+
 const retweetEdges: Association[] = tweets
   .flatMap(t =>
     t.retweeter.map(
@@ -13,6 +15,16 @@ const retweetEdges: Association[] = tweets
           label: AssociationType.Retweeting,
         })
       ))
+
+const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
+  if (authors.find(a => a.id === tweet.author.id)) {
+    return authors;
+  }
+  return [
+    ...authors,
+    tweet.author,
+  ]
+}, [])
 
 /**
  * methods
@@ -28,3 +40,8 @@ const T = (author: Author) => tweets
 
 const R = (source: Author, target: Author): Association[] => retweetEdges
   .filter(r => r.source === source && r.target === target)
+
+const P = (author: Author) => I(author, AssociationType.Following).length
+
+const InfRank = (author: Author) => P(author) / authors.length
+
