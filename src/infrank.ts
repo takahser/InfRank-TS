@@ -1,8 +1,7 @@
-
 /**
  * global variables
  */
-const edges: Association[] = [];
+const d = 0.83
 
 const tweets: Tweet[] = [];
 
@@ -29,10 +28,10 @@ const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
 /**
  * methods
  */
-const O = (author: Author, label: AssociationType) => edges
+const O = (author: Author, label: AssociationType) => retweetEdges
   .filter(e => e.source === author && e.label === label)
 
-const I = (author: Author, label: AssociationType) => edges
+const I = (author: Author, label: AssociationType) => retweetEdges
   .filter(e => e.target === author && e.label === label)
 
 const T = (author: Author) => tweets
