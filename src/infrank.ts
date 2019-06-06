@@ -58,6 +58,16 @@ const w_r = (a_i: Author, a_j: Author) =>
     )
   .length / T(a_i).length
 
+const w_r_sum = (a_i: Author) => I(a_i, AssociationType.Retweeting)
+  .reduce((sum, a_j) =>
+    // TODO 1:
+    // O(a_j, AssociationType.Retweeting) is NOT a number but from type Author[]
+
+    // TODO 2:
+    // What is Inf^k-1? Here we use InfK instead
+    sum + w_r(a_j, a_i) * InfK(a_j) / O(a_j, AssociationType.Retweeting).length
+  , 0)
+
 // without using d
 let naiveResults: number[] = []
 let dampedResults: number[] = []
@@ -69,16 +79,7 @@ authors.forEach(a_i => {
     naiveResult,
   ]
 
-  const w_r_sum = I(a_i, AssociationType.Retweeting)
-    .reduce((sum, a_j) =>
-      // TODO 1:
-      // O(a_j, AssociationType.Retweeting) is NOT a number but from type Author[]
-
-      // TODO 2:
-      // What is Inf^k-1? Here we use InfK instead
-      sum + w_r(a_j, a_i) * InfK(a_j) / O(a_j, AssociationType.Retweeting).length
-    , 0)
-  const damptedResult = (1-d) * P(a_i,) / authors.length * w_r_sum
+  const damptedResult = (1-d) * P(a_i,) / authors.length * w_r_sum(a_i)
   dampedResults = [
     ...dampedResults,
     damptedResult
