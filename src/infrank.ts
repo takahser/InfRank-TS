@@ -49,5 +49,20 @@ const R = (source: Author): Tweet[] => retweetEdges
 
 const P = (author: Author) => I(author, AssociationType.Following).length
 
-const InfRank = (author: Author) => P(author) / authors.length
+const InfK = (author: Author) => P(author) / authors.length
 
+const w_r = (a_i: Author, a_j: Author) =>
+  T(a_i)
+    .filter(
+      t => R(a_j).find(r => r.id === t.id)
+    )
+  .length / T(a_i).length
+
+let currentResults: number[] = []
+authors.forEach(a_i => {
+  const firstResult = InfK(a_i)
+  currentResults = [
+    ...currentResults,
+    firstResult,
+  ]
+})
