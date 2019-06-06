@@ -3,7 +3,7 @@
  */
 const d = 0.83
 
-const tweets: Tweet[] = [];
+const tweets: Tweet[] = []
 
 const retweetEdges: Association[] = tweets
   .flatMap(t =>
@@ -17,7 +17,7 @@ const retweetEdges: Association[] = tweets
 
 const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
   if (authors.find(a => a.id === tweet.author.id)) {
-    return authors;
+    return authors
   }
   return [
     ...authors,
@@ -30,9 +30,11 @@ const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
  */
 const O = (author: Author, label: AssociationType) => retweetEdges
   .filter(e => e.source === author && e.label === label)
+  .map(e => e.source)
 
 const I = (author: Author, label: AssociationType) => retweetEdges
   .filter(e => e.target === author && e.label === label)
+  .map(e => e.target)
 
 const T = (author: Author) => tweets
   .filter(t => t.author === author)
