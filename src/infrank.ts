@@ -39,8 +39,13 @@ const I = (author: Author, label: AssociationType) => retweetEdges
 const T = (author: Author) => tweets
   .filter(t => t.author === author)
 
-const R = (source: Author, target: Author): Association[] => retweetEdges
-  .filter(r => r.source === source && r.target === target)
+const R = (source: Author): Tweet[] => retweetEdges
+  .filter(e => e.source === source)
+    .flatMap(e =>
+      tweets.filter(t =>
+        t.author === e.source
+      )
+    )
 
 const P = (author: Author) => I(author, AssociationType.Following).length
 
