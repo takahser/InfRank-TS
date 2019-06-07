@@ -69,17 +69,12 @@ const w_r_sum = (a_i: Author) => I(a_i, AssociationType.Retweeting)
   , 0)
 
 // without using d
-let naiveResults: number[] = []
+const initialResults: number[] = authors.map(a_i => InfK(a_i))
+
 let dampedResults: number[] = []
 let normalizedResults: number[] = []
 
 authors.forEach(a_i => {
-  const naiveResult = InfK(a_i)
-  naiveResults = [
-    ...naiveResults,
-    naiveResult,
-  ]
-
   const dampedResult = (1-d) * P(a_i,) / authors.length * w_r_sum(a_i)
   dampedResults = [
     ...dampedResults,
