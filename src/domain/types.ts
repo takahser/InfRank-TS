@@ -25,3 +25,8 @@ interface Tweet {
   author: Author,
   retweeter: Author[], // retweeter := all author that retweeted >= 1 tweet of the author
 }
+
+interface AuthorRank {
+  author: Author,
+  rank: number,
+}
