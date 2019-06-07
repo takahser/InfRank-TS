@@ -135,6 +135,7 @@ const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
   author: a_i,
   rank: InfRank(a_i),
 }))
+console.log("TCL: initialAuthorRanks", initialAuthorRanks)
 
 let dampedAuthorRanks: AuthorRank[] = []
 let normalizedAuthorRanks: AuthorRank[] = []
@@ -170,6 +171,9 @@ while (!convergence) {
   })
 
   // check convergence
+  console.log("TCL: normalizedAuthorRanks", normalizedAuthorRanks)
+  console.log("TCL: dampedAuthorRanks", dampedAuthorRanks)
+
   if (dampedAuthorRanks[0] === normalizedAuthorRanks[0]) {
     convergence = true
   }
