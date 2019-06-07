@@ -181,5 +181,5 @@ while (!convergence) {
   }
 }
 
-console.log('Convergence found. 🎊 \nAll results: ', authorRanks)
+console.log(`Convergence found. 🎊 \nNumber of rounds: ${authorRanks.length}\nAll results: `, authorRanks)
 console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
