@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "exportAuthors": "npm run build && node src/data-mining/get-grouped-tweeters.js && json2csv -i ./out/authors.json -f userName,numberOfTweets,url > ./out/authors.csv",
-    "build": "tsc"
+    "build": "tsc",
+    "infrank": "npm run build && node src/infrank.js"
   },
   "author": "takahser",
   "license": "MIT",
