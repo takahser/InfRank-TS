@@ -69,23 +69,31 @@ const w_r_sum = (a_i: Author) => I(a_i, AssociationType.Retweeting)
   , 0)
 
 // without using d
-const initialResults: number[] = authors.map(a_i => InfRank(a_i))
+const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
+  author: a_i,
+  rank: InfRank(a_i),
+}))
 
-let dampedResults: number[] = []
-let normalizedResults: number[] = []
+let dampedAuthorRanks: AuthorRank[] = []
+let normalizedAuthorRanks: AuthorRank[] = []
 
 authors.forEach(a_i => {
-  const dampedResult = (1-d) * P(a_i,) / authors.length * w_r_sum(a_i)
-  dampedResults = [
-    ...dampedResults,
+  const dampedResult = {
+    author: a_i,
+    rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i)
+  }
+  dampedAuthorRanks = [
+    ...dampedAuthorRanks,
     dampedResult
   ]
 
   // normalization
-  // TODO (?)
-  const normalizedResult = dampedResult / dampedResults.reduce((sum, r) => sum + r, 0)
-  normalizedResults = [
-    ...normalizedResults,
+  const normalizedResult = {
+    author: a_i,
+    rank: dampedResult.rank / dampedAuthorRanks.reduce((sum, ar) => sum + ar.rank, 0)
+  }
+  normalizedAuthorRanks = [
+    ...normalizedAuthorRanks,
     normalizedResult,
   ]
 })
