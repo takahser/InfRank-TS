@@ -114,7 +114,7 @@ const R = (source: Author): Tweet[] => retweetEdges
       )
     )
 
-const P = (author: Author) => I(author, AssociationType.Following).length
+const P = (author: Author) => I(author, AssociationType.Retweeting).length
 
 const InfRank = (author: Author) => P(author) / authors.length
 
