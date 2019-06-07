@@ -1,3 +1,4 @@
+import { Author, Association, AssociationType, Tweet, AuthorRank } from "./domain";
 /**
  * global variables
  */
