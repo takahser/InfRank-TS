@@ -96,21 +96,21 @@ const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
  * methods
  */
 const O = (author: Author, label: AssociationType) => retweetEdges
-  .filter(e => e.source === author && e.label === label)
+  .filter(e => e.source.id === author.id && e.label === label)
   .map(e => e.source)
 
 const I = (author: Author, label: AssociationType) => retweetEdges
-  .filter(e => e.target === author && e.label === label)
+  .filter(e => e.target.id === author.id && e.label === label)
   .map(e => e.target)
 
 const T = (author: Author) => tweets
-  .filter(t => t.author === author)
+  .filter(t => t.author.id === author.id)
 
 const R = (source: Author): Tweet[] => retweetEdges
-  .filter(e => e.source === source)
+  .filter(e => e.source.id === source.id)
     .flatMap(e =>
       tweets.filter(t =>
-        t.author === e.source
+        t.author.id === e.source.id
       )
     )
 
@@ -179,7 +179,7 @@ while (!convergence) {
   console.log("TCL: normalizedAuthorRanks", currentAuthorRanks)
   console.log("TCL: previousAuthorResults", previousAuthorResults)
 
-  if (previousAuthorResults[0] === currentAuthorRanks[0]) {
+  if (previousAuthorResults[0].rank === currentAuthorRanks[0].rank) {
     convergence = true
   }
 }
