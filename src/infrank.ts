@@ -58,14 +58,9 @@ const w_r = (a_i: Author, a_j: Author) =>
     )
   .length / T(a_i).length
 
-const w_r_sum = (a_i: Author) => I(a_i, AssociationType.Retweeting)
+const w_r_sum = (a_i: Author, previousRank: number) => I(a_i, AssociationType.Retweeting)
   .reduce((sum, a_j) =>
-    // TODO 1:
-    // O(a_j, AssociationType.Retweeting) is NOT a number but from type Author[]
-
-    // TODO 2:
-    // What is Inf^k-1? Here we use InfK instead
-    sum + w_r(a_j, a_i) * InfRank(a_j) / O(a_j, AssociationType.Retweeting).length
+    sum + w_r(a_j, a_i) * previousRank / O(a_j, AssociationType.Retweeting).length
   , 0)
 
 // without using d
@@ -78,9 +73,15 @@ let dampedAuthorRanks: AuthorRank[] = []
 let normalizedAuthorRanks: AuthorRank[] = []
 
 authors.forEach(a_i => {
+  const previousAuthorRank = initialAuthorRanks.find(ar => ar.author.id === a_i.id);
+
+  if (!previousAuthorRank) {
+    return; // shouldn't happen
+  }
+
   const dampedResult = {
     author: a_i,
-    rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i)
+    rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank)
   }
   dampedAuthorRanks = [
     ...dampedAuthorRanks,
