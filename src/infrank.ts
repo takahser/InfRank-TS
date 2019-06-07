@@ -1,10 +1,76 @@
 import { Author, Association, AssociationType, Tweet, AuthorRank } from "./domain";
+
+// mocked data
+const donald: Author = {
+  id: '1',
+  nickname: 'donald',
+}
+const nigel: Author = {
+  id: '2',
+  nickname: 'nigel',
+}
+const mickey: Author = {
+  id: '3',
+  nickname: 'mickey'
+}
+
+const tweets = [{
+  id: 'd001',
+  author: donald,
+  retweeter: [
+    nigel,
+    mickey,
+  ]
+},{
+  id: 'd002',
+  author: donald,
+  retweeter: [
+    nigel,
+    mickey,
+  ]
+},{
+  id: 'd003',
+  author: donald,
+  retweeter: [
+    nigel,
+    mickey,
+  ]
+},{
+  id: 'd004',
+  author: donald,
+  retweeter: [
+    nigel,
+    mickey,
+  ]
+},{
+  id: 'n005',
+  author: nigel,
+  retweeter: [
+    donald,
+    mickey,
+  ]
+},{
+  id: 'n006',
+  author: nigel,
+  retweeter: [
+    donald,
+    mickey,
+  ]
+},{
+  id: '007',
+  author: mickey,
+  retweeter: [
+    donald,
+    nigel,
+  ]
+}]
+
 /**
  * global variables
  */
 const d = 0.83
 
-const tweets: Tweet[] = []
+// const tweets: Tweet[] = []
 
 const retweetEdges: Association[] = tweets
   .flatMap(t =>
