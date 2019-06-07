@@ -131,20 +131,23 @@ const w_r_sum = (a_i: Author, previousRank: number) => I(a_i, AssociationType.Re
   , 0)
 
 // without using d
+// k = 0
 const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
   author: a_i,
   rank: InfRank(a_i),
 }))
-console.log("TCL: initialAuthorRanks", initialAuthorRanks)
 
-let dampedAuthorRanks: AuthorRank[] = []
-let normalizedAuthorRanks: AuthorRank[] = []
+let authorRanks = [ initialAuthorRanks ] // k = 0
 
 let convergence = false
 
 while (!convergence) {
+  const lastIndex = authorRanks.length - 1 // k - 1
+  const previousAuthorResults: AuthorRank[] = authorRanks[lastIndex];
+  let currentAuthorRanks: AuthorRank[] = []
+
   authors.forEach(a_i => {
-    const previousAuthorRank = initialAuthorRanks.find(ar => ar.author.id === a_i.id);
+    const previousAuthorRank = previousAuthorResults.find(ar => ar.author.id === a_i.id);
 
     if (!previousAuthorRank) {
       return; // shouldn't happen
@@ -154,27 +157,29 @@ while (!convergence) {
       author: a_i,
       rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank)
     }
-    dampedAuthorRanks = [
-      ...dampedAuthorRanks,
-      dampedResult
-    ]
 
     // normalization
     const normalizedResult = {
       author: a_i,
-      rank: dampedResult.rank / dampedAuthorRanks.reduce((sum, ar) => sum + ar.rank, 0)
+      rank: dampedResult.rank / previousAuthorResults.reduce((sum, ar) => sum + ar.rank, 0)
     }
-    normalizedAuthorRanks = [
-      ...normalizedAuthorRanks,
+    currentAuthorRanks = [
+      ...currentAuthorRanks,
       normalizedResult,
     ]
   })
 
-  // check convergence
-  console.log("TCL: normalizedAuthorRanks", normalizedAuthorRanks)
-  console.log("TCL: dampedAuthorRanks", dampedAuthorRanks)
+  // update author ranks
+  authorRanks = [
+    ...authorRanks,
+    currentAuthorRanks,
+  ]
 
-  if (dampedAuthorRanks[0] === normalizedAuthorRanks[0]) {
+  // check convergence
+  console.log("TCL: normalizedAuthorRanks", currentAuthorRanks)
+  console.log("TCL: previousAuthorResults", previousAuthorResults)
+
+  if (previousAuthorResults[0] === currentAuthorRanks[0]) {
     convergence = true
   }
 }
