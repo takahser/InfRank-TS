@@ -49,7 +49,7 @@ const R = (source: Author): Tweet[] => retweetEdges
 
 const P = (author: Author) => I(author, AssociationType.Following).length
 
-const InfK = (author: Author) => P(author) / authors.length
+const InfRank = (author: Author) => P(author) / authors.length
 
 const w_r = (a_i: Author, a_j: Author) =>
   T(a_i)
@@ -65,11 +65,11 @@ const w_r_sum = (a_i: Author) => I(a_i, AssociationType.Retweeting)
 
     // TODO 2:
     // What is Inf^k-1? Here we use InfK instead
-    sum + w_r(a_j, a_i) * InfK(a_j) / O(a_j, AssociationType.Retweeting).length
+    sum + w_r(a_j, a_i) * InfRank(a_j) / O(a_j, AssociationType.Retweeting).length
   , 0)
 
 // without using d
-const initialResults: number[] = authors.map(a_i => InfK(a_i))
+const initialResults: number[] = authors.map(a_i => InfRank(a_i))
 
 let dampedResults: number[] = []
 let normalizedResults: number[] = []
