@@ -1,7 +1,7 @@
 {
   "name": "infrank",
   "version": "1.0.0",
-  "description": "",
+  "description": "## Exporting the Authors",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -11,8 +11,22 @@
   "author": "takahser",
   "license": "MIT",
   "dependencies": {
+    "@types/node": "^12.0.7",
     "json2csv": "^4.5.1",
     "jsonfile": "^5.0.0",
     "mongodb": "^3.2.6"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/takahser/InfRank-TS.git"
+  },
+  "keywords": [
+    "pagerank",
+    "infrank",
+    "influencer"
+  ],
+  "bugs": {
+    "url": "https://github.com/takahser/InfRank-TS/issues"
+  },
+  "homepage": "https://github.com/takahser/InfRank-TS#readme"
 }
