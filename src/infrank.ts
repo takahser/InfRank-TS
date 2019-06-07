@@ -72,29 +72,38 @@ const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
 let dampedAuthorRanks: AuthorRank[] = []
 let normalizedAuthorRanks: AuthorRank[] = []
 
-authors.forEach(a_i => {
-  const previousAuthorRank = initialAuthorRanks.find(ar => ar.author.id === a_i.id);
+let convergence = false
 
-  if (!previousAuthorRank) {
-    return; // shouldn't happen
-  }
+while (!convergence) {
+  authors.forEach(a_i => {
+    const previousAuthorRank = initialAuthorRanks.find(ar => ar.author.id === a_i.id);
 
-  const dampedResult = {
-    author: a_i,
-    rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank)
-  }
-  dampedAuthorRanks = [
-    ...dampedAuthorRanks,
-    dampedResult
-  ]
+    if (!previousAuthorRank) {
+      return; // shouldn't happen
+    }
 
-  // normalization
-  const normalizedResult = {
-    author: a_i,
-    rank: dampedResult.rank / dampedAuthorRanks.reduce((sum, ar) => sum + ar.rank, 0)
+    const dampedResult = {
+      author: a_i,
+      rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank)
+    }
+    dampedAuthorRanks = [
+      ...dampedAuthorRanks,
+      dampedResult
+    ]
+
+    // normalization
+    const normalizedResult = {
+      author: a_i,
+      rank: dampedResult.rank / dampedAuthorRanks.reduce((sum, ar) => sum + ar.rank, 0)
+    }
+    normalizedAuthorRanks = [
+      ...normalizedAuthorRanks,
+      normalizedResult,
+    ]
+  })
+
+  // check convergence
+  if (dampedAuthorRanks[0] === normalizedAuthorRanks[0]) {
+    convergence = true
   }
-  normalizedAuthorRanks = [
-    ...normalizedAuthorRanks,
-    normalizedResult,
-  ]
-})
+}
