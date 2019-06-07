@@ -176,10 +176,10 @@ while (!convergence) {
   ]
 
   // check convergence
-  console.log("TCL: normalizedAuthorRanks", currentAuthorRanks)
-  console.log("TCL: previousAuthorResults", previousAuthorResults)
-
   if (previousAuthorResults[0].rank === currentAuthorRanks[0].rank) {
     convergence = true
   }
 }
+
+console.log('Convergence found. 🎊 \nAll results: ', authorRanks)
+console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
