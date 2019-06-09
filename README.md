@@ -11,4 +11,4 @@ npm run exportAuthors
 
 ```bash
 npm run infrank
-```
+```
