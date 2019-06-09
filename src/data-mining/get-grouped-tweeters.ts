@@ -1,3 +1,5 @@
+import { Tweet } from "../domain";
+
 const MongoClient = require('mongodb').MongoClient;
 const jsonfile = require('jsonfile')
 
@@ -45,6 +47,25 @@ MongoClient.connect((url), async (err, client) => {
   const retweets = await findRetweets(db);
   console.log("TCL: retweets", retweets)
   
+  /**
+   * 4. aggregate tweets
+   */
+  const aggregatedTweets: Tweet[] = originalTweets
+    .map(ot => ({
+      id: ot.rawTweet.id_str,
+      author: {
+        id: ot.author,
+        nickname: ot.author,
+      },
+      retweeter: retweets
+        .filter(r => r.rawTweet.retweeted_status.id_str === ot.rawTweet.id_str)
+        .map(r => ({
+          id: r.author,
+          nickname: r.author,
+        }))
+    }))
+  console.log("TCL: aggregatedTweets", aggregatedTweets)
+
   client.close();
  
   // findDocuments(db, (docs) => {
