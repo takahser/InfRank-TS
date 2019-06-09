@@ -26,7 +26,7 @@ MongoClient.connect((url), async (err, client) => {
     url: `https://twitter.com/${a._id}`
   }));
 
-  console.log('TCL: authors', authorsWithUrls)
+  // console.log('TCL: authors', authorsWithUrls)
 
   const file = './out/authors.json';
 
@@ -68,9 +68,6 @@ MongoClient.connect((url), async (err, client) => {
 
   client.close();
  
-  // findDocuments(db, (docs) => {
-  //   console.log(docs);
-  // });
   return;
 });
 
@@ -149,15 +146,4 @@ const findRetweets = async db => {
     }
   ).toArray();
   return tweets;
-}
-const findDocuments = function(db, callback) {
-  // Get the documents collection
-  const collection = db.collection('tweetsentiments');
-  // Find some documents
-  collection.find({}).toArray(function(err, docs) {
-    console.log('TCL: findDocuments -> err', err)
-    console.log('Found the following records');
-    console.log(docs)
-    callback(docs);
-  });
 }
