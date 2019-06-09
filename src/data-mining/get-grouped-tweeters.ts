@@ -84,10 +84,27 @@ const findAuthors = async (db, callback) => {
 const findOriginalTweets = async db => {
   const collection = db.collection('tweetsentiments');
 
-  const authors = collection.find(
-    {
+  const originalTweets = await collection.find({
+    $query: {
       'rawTweet.lang': 'en',
       'rawTweet.retweeted_status.created_at': { '$exists': false }, // filter after original tweets (no RT's)
+    },
+    $orderby: { 'author' : -1 }
+  }).toArray();
+
+  const uniqueTweets = originalTweets
+    .reduce((tweets, currentTweet) => {
+      if (!tweets.find(t => t.rawTweet.id_str === currentTweet.rawTweet.id_str)) {
+        tweets = [
+          ...tweets,
+          currentTweet
+        ];
+      }
+      return tweets;
+    }, []);
+
+  return uniqueTweets;
+}
     }
   ).toArray();
   return authors;
