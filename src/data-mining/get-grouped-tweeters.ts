@@ -126,7 +126,9 @@ const findOriginalTweets = async db => {
     // {
     //   '$limit': 100
     // }
-  ]).toArray();
+  ], {
+    allowDiskUse: true,
+  }).toArray();
 
   const uniqueTweets = originalTweets
     .reduce((tweets, currentTweet) => {
