@@ -9,7 +9,7 @@ const dbName = 'cryptimentizzle';
  
 // Use connect method to connect to the server
 MongoClient.connect((url), async (err, client) => {
-  console.log("Connected successfully to server");
+  console.log('Connected successfully to server');
  
   const db = client.db(dbName);
 
@@ -21,7 +21,7 @@ MongoClient.connect((url), async (err, client) => {
     url: `https://twitter.com/${a._id}`
   }));
 
-  console.log("TCL: authors", authorsWithUrls)
+  console.log('TCL: authors', authorsWithUrls)
 
   const file = './out/authors.json';
 
@@ -43,9 +43,9 @@ const findAuthors = async (db, callback) => {
   const authors = collection.aggregate([
     {
       '$match': {
-        "rawTweet.lang": "en",
-        "rawTweet.retweeted_status.created_at": { "$exists": false },
-        // "rawTweet.user.verified": true
+        'rawTweet.lang': 'en',
+        'rawTweet.retweeted_status.created_at': { '$exists': false }, // filter after original tweets (no RT's)
+        // 'rawTweet.user.verified': true
       }
     },
     {
@@ -56,15 +56,16 @@ const findAuthors = async (db, callback) => {
         }
       }
     },
-    { "$group": {
-      "_id": "$_id",
-       "numberOfTweets": {
-          "$sum": { "$size": "$tweets" }
+    {
+      '$group': {
+        '_id': '$_id',
+         'numberOfTweets': {
+            '$sum': { '$size': '$tweets' }
+         }
        }
-     }
     },
     {
-      "$sort": { "numberOfTweets": -1 }
+      '$sort': { 'numberOfTweets': -1 }
     }
   ]).toArray();
   return authors;
@@ -75,8 +76,8 @@ const findDocuments = function(db, callback) {
   const collection = db.collection('tweetsentiments');
   // Find some documents
   collection.find({}).toArray(function(err, docs) {
-    console.log("TCL: findDocuments -> err", err)
-    console.log("Found the following records");
+    console.log('TCL: findDocuments -> err', err)
+    console.log('Found the following records');
     console.log(docs)
     callback(docs);
   });
