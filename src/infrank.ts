@@ -68,7 +68,7 @@ const tweets = [{
 /**
  * global variables
  */
-const d = 0.83
+const d = 0.85
 
 // const tweets: Tweet[] = []
 
