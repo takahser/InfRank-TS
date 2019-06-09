@@ -28,9 +28,9 @@ MongoClient.connect((url), async (err, client) => {
 
   // console.log('TCL: authors', authorsWithUrls)
 
-  const file = './out/authors.json';
+  const authorsFile = './out/authors.json';
 
-  jsonfile.writeFile(file, authorsWithUrls, err => {
+  jsonfile.writeFile(authorsFile, authorsWithUrls, err => {
     if (err) console.error(err);
   });
 
@@ -65,6 +65,11 @@ MongoClient.connect((url), async (err, client) => {
         }))
     }))
   console.log("TCL: aggregatedTweets", aggregatedTweets)
+  const tweetsFile = './out/tweets.json';
+
+  jsonfile.writeFile(tweetsFile, aggregatedTweets, err => {
+    if (err) console.error(err);
+  });
 
   client.close();
  
@@ -118,9 +123,9 @@ const findOriginalTweets = async db => {
     {
       '$sort': { 'author' : -1 }
     },
-    {
-      '$limit': 100
-    }
+    // {
+    //   '$limit': 100
+    // }
   ]).toArray();
 
   const uniqueTweets = originalTweets
