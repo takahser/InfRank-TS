@@ -13,6 +13,9 @@ MongoClient.connect((url), async (err, client) => {
  
   const db = client.db(dbName);
 
+  /**
+   * 1. Get Authors
+   */
   const authors = await findAuthors(db, docs => {});
 
   const authorsWithUrls = authors.map(a => ({
@@ -28,6 +31,13 @@ MongoClient.connect((url), async (err, client) => {
   jsonfile.writeFile(file, authorsWithUrls, err => {
     if (err) console.error(err);
   });
+
+
+  /**
+   * 2. Get original Tweets
+   */
+  const originalTweets = await findOriginalTweets(db);
+  console.log("TCL: originalTweets", originalTweets);
 
   client.close();
  
@@ -71,6 +81,17 @@ const findAuthors = async (db, callback) => {
   return authors;
 }
 
+const findOriginalTweets = async db => {
+  const collection = db.collection('tweetsentiments');
+
+  const authors = collection.find(
+    {
+      'rawTweet.lang': 'en',
+      'rawTweet.retweeted_status.created_at': { '$exists': false }, // filter after original tweets (no RT's)
+    }
+  ).toArray();
+  return authors;
+}
 const findDocuments = function(db, callback) {
   // Get the documents collection
   const collection = db.collection('tweetsentiments');
