@@ -39,6 +39,12 @@ MongoClient.connect((url), async (err, client) => {
   const originalTweets = await findOriginalTweets(db);
   console.log("TCL: originalTweets", originalTweets);
 
+  /**
+   * 3. get retweets
+   */
+  const retweets = await findRetweets(db);
+  console.log("TCL: retweets", retweets)
+  
   client.close();
  
   // findDocuments(db, (docs) => {
@@ -105,9 +111,16 @@ const findOriginalTweets = async db => {
 
   return uniqueTweets;
 }
+
+const findRetweets = async db => {
+  const collection = db.collection('tweetsentiments');
+  const tweets = collection.find(
+    {
+      'rawTweet.lang': 'en',
+      'rawTweet.retweeted_status.created_at': { '$exists': true }, // filter after retweets (only RT's)
     }
   ).toArray();
-  return authors;
+  return tweets;
 }
 const findDocuments = function(db, callback) {
   // Get the documents collection
