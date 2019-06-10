@@ -13,6 +13,10 @@ const mickey: Author = {
   id: '3',
   nickname: 'mickey'
 }
+const ronald: Author = {
+  id: '4',
+  nickname: 'ronald'
+}
 
 const tweets = [{
   id: 'd001',
@@ -57,12 +61,16 @@ const tweets = [{
     mickey,
   ]
 },{
-  id: '007',
+  id: 'm007',
   author: mickey,
   retweeter: [
     donald,
     nigel,
   ]
+}, {
+  id: 'r008',
+  author: ronald,
+  retweeter: []
 }]
 
 /**
