@@ -1,5 +1,6 @@
-import { Author, Association, AssociationType, Tweet, AuthorRank } from "../domain";
-import { tweets } from './mocks';
+import { findOriginalTweets, findRetweets } from '../data-mining/queries';
+import { Association, AssociationType, Author, AuthorRank, Tweet } from '../domain';
+import { dbName, getMongoClient } from '../persistence';
 
 /**
  * global variables
@@ -7,6 +8,32 @@ import { tweets } from './mocks';
 const d = 0.85
 
 const analyze = async () => {
+
+  /**
+   * 1. get tweets from db
+   */
+  const mongoClient = await getMongoClient()
+  const db = mongoClient.db(dbName)
+  const originalTweets = await findOriginalTweets(db)
+  const retweets = await findRetweets(db);
+  const tweets: Tweet[] = originalTweets
+    .map(ot => ({
+      id: ot.rawTweet.id_str,
+      author: {
+        id: ot.author,
+        nickname: ot.author,
+      },
+      retweeter: retweets
+        .filter(r => r.rawTweet.retweeted_status.id_str === ot.rawTweet.id_str)
+        .map(r => ({
+          id: r.author,
+          nickname: r.author,
+        }))
+    }))
+
+  /**
+   * 2. evaluate edges and authors
+   */
   const retweetEdges: Association[] = tweets
     .flatMap(t =>
       t.retweeter.map(
@@ -28,7 +55,7 @@ const analyze = async () => {
   }, [])
   
   /**
-   * methods
+   * 3. methods
    */
   const O = (author: Author, label: AssociationType) => retweetEdges
     .filter(e => e.source.id === author.id && e.label === label)
@@ -71,7 +98,7 @@ const analyze = async () => {
         : sum
     }, 0)
   
-  // without using d
+  // without using d (a.k.a. d = 0)
   // k = 0
   const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
     author: a_i,
@@ -85,6 +112,9 @@ const analyze = async () => {
   let kMax = 5 // max nr of rounds/iterations
   let k = 0
   
+  /**
+   * 4. run infrank
+   */
   while (!convergence && k < kMax - 1) {
     k++
   
