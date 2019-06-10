@@ -8,9 +8,9 @@ const url = 'mongodb://localhost:27017';
  
 // Database Name
 const dbName = 'cryptimentizzle';
- 
+
 // Use connect method to connect to the server
-MongoClient.connect((url), async (err, client) => {
+MongoClient.connect((url)).then(async client => {
   console.log('Connected successfully to server');
  
   const db = client.db(dbName);
@@ -18,7 +18,7 @@ MongoClient.connect((url), async (err, client) => {
   /**
    * 1. Get Authors
    */
-  const authors = await findAuthors(db, docs => {});
+  const authors = await findAuthors(db);
 
   const authorsWithUrls = authors.map(a => ({
     userName: a._id,
@@ -33,7 +33,6 @@ MongoClient.connect((url), async (err, client) => {
   jsonfile.writeFile(authorsFile, authorsWithUrls, err => {
     if (err) console.error(err);
   });
-
 
   /**
    * 2. Get original Tweets
@@ -76,7 +75,7 @@ MongoClient.connect((url), async (err, client) => {
   return;
 });
 
-const findAuthors = async (db, callback) => {
+const findAuthors = async db => {
   const collection = db.collection('tweetsentiments');
 
   const authors = collection.aggregate([
