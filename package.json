@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "exportAuthors": "npm run build && node src/main.js && json2csv -i ./out/authors.json -f userName,numberOfTweets,url > ./out/authors.csv",
     "build": "tsc",
-    "infrank": "npm run build && node src/infrank.js"
+    "infrank": "npm run build && node src/infrank/infrank.js"
   },
   "author": "takahser",
   "license": "MIT",

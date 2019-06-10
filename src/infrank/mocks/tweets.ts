@@ -1,3 +1,5 @@
+import { Author } from '../../domain';
+
 const donald: Author = {
   id: '1',
   nickname: 'donald',

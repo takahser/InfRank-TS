@@ -1,4 +1,4 @@
-import { Author, Association, AssociationType, Tweet, AuthorRank } from "./domain";
+import { Author, Association, AssociationType, Tweet, AuthorRank } from "../domain";
 import { tweets } from './mocks';
 
 /**
