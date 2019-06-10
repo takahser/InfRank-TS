@@ -16,3 +16,4 @@ npm run infrank
 ## Run times
 
 - 10k, 1 iteration => 1m 40s
+- 20k, 1 iteration => 4min
