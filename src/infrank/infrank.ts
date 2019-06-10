@@ -1,15 +1,26 @@
-import { findOriginalTweets, findRetweets } from '../data-mining/queries';
-import { Association, AssociationType, Author, AuthorRank, Tweet, sortAuthorRanksDescending } from '../domain';
-import { dbName, getMongoClient } from '../persistence';
-
+import * as fs from 'fs';
 import * as jsonfile from 'jsonfile';
+import neatCsv from 'neat-csv';
+import * as util from 'util';
+
+import { findOriginalTweets, findRetweets } from '../data-mining/queries';
+import { Association, AssociationType, Author, AuthorRank, sortAuthorRanksDescending, Tweet } from '../domain';
+import { dbName, getMongoClient } from '../persistence';
 
 /**
  * global variables
  */
 const d = 0.85
+const csvPath = './in/authors.csv';
 
 const analyze = async () => {
+
+  /**
+   * 0. get authors with corp data info
+   */
+  const readFile = util.promisify(fs.readFile);
+  let csvData = await readFile(csvPath, 'utf8'); // Get csv string from file
+  const authorsWithOrgInfo = await neatCsv(csvData)
 
   /**
    * 1. get tweets from db
@@ -164,6 +175,10 @@ const analyze = async () => {
   
   console.log(`Convergence found. 🎊 \nNumber of rounds: ${authorRanks.length}\nAll results: `, authorRanks)
   console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
+  // console.log(`Ranking initial round: \n 1. ${authorRanks[0][0].author}`);
+  // console.log(`Ranking initial round: \n 1. ${authorRanks[0][0].author.id}`);
+  // console.log(`Ranking latest round: \n 1. ${authorRanks[authorRanks.length-1][0].author.id}`);
+
   // persist
   const infrankFile = './out/infrank.json';
   const authorsWithoutId = authorRanks[authorRanks.length - 1].map(ar => ({
