@@ -1,5 +1,5 @@
 import { findOriginalTweets, findRetweets } from '../data-mining/queries';
-import { Association, AssociationType, Author, AuthorRank, Tweet } from '../domain';
+import { Association, AssociationType, Author, AuthorRank, Tweet, sortAuthorRanksDescending } from '../domain';
 import { dbName, getMongoClient } from '../persistence';
 
 /**
@@ -156,6 +156,9 @@ const analyze = async () => {
       convergence = true
     }
   }
+
+  // sort results by rank
+  authorRanks = [ ...authorRanks.map(r => r.sort(sortAuthorRanksDescending)) ]
   
   console.log(`Convergence found. 🎊 \nNumber of rounds: ${authorRanks.length}\nAll results: `, authorRanks)
   console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
