@@ -173,6 +173,8 @@ const analyze = async () => {
   jsonfile.writeFile(infrankFile, authorsWithoutId, err => {
     if (err) console.error(err);
   });
+
+  mongoClient.close() 
 }
 
 analyze()
