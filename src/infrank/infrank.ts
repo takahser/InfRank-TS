@@ -2,6 +2,8 @@ import { findOriginalTweets, findRetweets } from '../data-mining/queries';
 import { Association, AssociationType, Author, AuthorRank, Tweet, sortAuthorRanksDescending } from '../domain';
 import { dbName, getMongoClient } from '../persistence';
 
+import * as jsonfile from 'jsonfile';
+
 /**
  * global variables
  */
@@ -162,6 +164,11 @@ const analyze = async () => {
   
   console.log(`Convergence found. 🎊 \nNumber of rounds: ${authorRanks.length}\nAll results: `, authorRanks)
   console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
+  // persist
+  const infrankFile = './out/infrank.json';
+  jsonfile.writeFile(infrankFile, authorRanks[authorRanks.length - 1], err => {
+    if (err) console.error(err);
+  });
 }
 
 analyze()
