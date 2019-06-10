@@ -141,7 +141,13 @@ let authorRanks = [ initialAuthorRanks ] // k = 0
 
 let convergence = false
 
-while (!convergence) {
+let kMax = 5 // max nr of rounds/iterations
+let k = 0
+
+while (!convergence && k < kMax - 1) {
+  k++
+  console.log("TCL: k", k)
+
   const lastIndex = authorRanks.length - 1 // k - 1
   const previousAuthorResults: AuthorRank[] = authorRanks[lastIndex];
   let currentAuthorRanks: AuthorRank[] = []
