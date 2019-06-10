@@ -126,9 +126,15 @@ const w_r = (a_i: Author, a_j: Author) =>
   .length / T(a_i).length
 
 const w_r_sum = (a_i: Author, previousRank: number) => I(a_i, AssociationType.Retweeting)
-  .reduce((sum, a_j) =>
-    sum + w_r(a_j, a_i) * previousRank / O(a_j, AssociationType.Retweeting).length
-  , 0)
+  .reduce((sum, a_j) => {
+    const o = O(a_j, AssociationType.Retweeting).length
+
+    // avoid illegal division by 0
+    // TODO: sync with paper
+    return o > 0
+      ? sum + w_r(a_j, a_i) * previousRank / O(a_j, AssociationType.Retweeting).length
+      : sum
+  }, 0)
 
 // without using d
 // k = 0
@@ -146,7 +152,6 @@ let k = 0
 
 while (!convergence && k < kMax - 1) {
   k++
-  console.log("TCL: k", k)
 
   const lastIndex = authorRanks.length - 1 // k - 1
   const previousAuthorResults: AuthorRank[] = authorRanks[lastIndex];
