@@ -166,7 +166,11 @@ const analyze = async () => {
   console.log('Convergent results: ', authorRanks[authorRanks.length - 1])
   // persist
   const infrankFile = './out/infrank.json';
-  jsonfile.writeFile(infrankFile, authorRanks[authorRanks.length - 1], err => {
+  const authorsWithoutId = authorRanks[authorRanks.length - 1].map(ar => ({
+    rank: ar.rank,
+    author: ar.author.nickname
+  }))
+  jsonfile.writeFile(infrankFile, authorsWithoutId, err => {
     if (err) console.error(err);
   });
 }
