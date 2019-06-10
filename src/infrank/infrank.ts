@@ -20,7 +20,8 @@ const analyze = async () => {
    */
   const readFile = util.promisify(fs.readFile);
   let csvData = await readFile(csvPath, 'utf8'); // Get csv string from file
-  const authorsWithOrgInfo = await neatCsv(csvData)
+  const allAuthors = await neatCsv(csvData)
+  const organisationalAuthors = allAuthors.filter(a => a.isOrg === '1')
 
   /**
    * 1. get tweets from db
@@ -183,13 +184,15 @@ const analyze = async () => {
   const infrankFile = './out/infrank.json';
   const authorsWithoutId = authorRanks[authorRanks.length - 1].map(ar => ({
     rank: ar.rank,
-    author: ar.author.nickname
+    author: ar.author.nickname,
+    isOrganisation: allAuthors.find(a => a.userName === ar.author.nickname).isOrg === '1'
   }))
-  jsonfile.writeFile(infrankFile, authorsWithoutId, err => {
+  const organizationalAuthorsWithoutId = authorsWithoutId.filter(a => a.isOrganisation)
+  jsonfile.writeFile(infrankFile, organizationalAuthorsWithoutId, err => {
     if (err) console.error(err);
-  });
+  })
 
-  mongoClient.close() 
+  mongoClient.close()
 }
 
 analyze()
