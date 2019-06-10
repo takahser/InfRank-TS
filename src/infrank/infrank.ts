@@ -111,7 +111,7 @@ const analyze = async () => {
   
   let convergence = false
   
-  let kMax = 5 // max nr of rounds/iterations
+  let kMax = 1 // max nr of rounds/iterations
   let k = 0
   
   /**
