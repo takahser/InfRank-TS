@@ -12,7 +12,7 @@ export const findOriginalTweets = async db => {
       '$sort': { 'author' : -1 }
     },
     {
-      '$limit': 2e4
+      '$limit': 4e4
     }
   ], {
     allowDiskUse: true,
