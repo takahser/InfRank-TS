@@ -1,20 +1,13 @@
-import { findAuthors, findOriginalTweets, findRetweets } from '.';
-import { Tweet } from '../domain';
+import { findAuthors, findOriginalTweets, findRetweets } from './data-mining/queries';
+import { Tweet } from './domain';
+import { dbName, getMongoClient } from './persistence';
 
-const MongoClient = require('mongodb').MongoClient;
-const jsonfile = require('jsonfile')
+import * as jsonfile from 'jsonfile';
 
-// Connection URL
-const url = 'mongodb://localhost:27017';
- 
-// Database Name
-const dbName = 'cryptimentizzle';
+const main = async () => {
+  const mongoClient = await getMongoClient()
 
-// Use connect method to connect to the server
-MongoClient.connect((url)).then(async client => {
-  console.log('Connected successfully to server');
- 
-  const db = client.db(dbName);
+  const db = mongoClient.db(dbName)
 
   /**
    * 1. Get Authors
@@ -71,7 +64,7 @@ MongoClient.connect((url)).then(async client => {
     if (err) console.error(err);
   });
 
-  client.close();
- 
-  return;
-});
+  mongoClient.close() 
+}
+
+main()
