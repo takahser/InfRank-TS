@@ -3,18 +3,22 @@ import { Author } from '../../domain';
 const donald: Author = {
   id: '1',
   nickname: 'donald',
+  sentiments: [],
 }
 const nigel: Author = {
   id: '2',
   nickname: 'nigel',
+  sentiments: [],
 }
 const mickey: Author = {
   id: '3',
-  nickname: 'mickey'
+  nickname: 'mickey',
+  sentiments: [],
 }
 const ronald: Author = {
   id: '4',
-  nickname: 'ronald'
+  nickname: 'ronald',
+  sentiments: [],
 }
 
 export const tweets = [{

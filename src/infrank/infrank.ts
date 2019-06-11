@@ -21,7 +21,6 @@ const analyze = async () => {
   const readFile = util.promisify(fs.readFile);
   let csvData = await readFile(csvPath, 'utf8'); // Get csv string from file
   const allAuthors = await neatCsv(csvData)
-  const organisationalAuthors = allAuthors.filter(a => a.isOrg === '1')
 
   /**
    * 1. get tweets from db
@@ -37,6 +36,7 @@ const analyze = async () => {
         id: ot.author,
         nickname: ot.author,
       },
+      sentiment: ot.sentiment,
       retweeter: retweets
         .filter(r => r.rawTweet.retweeted_status.id_str === ot.rawTweet.id_str)
         .map(r => ({
@@ -59,12 +59,22 @@ const analyze = async () => {
         ))
   
   const authors = tweets.reduce((authors: Author[], tweet: Tweet) => {
-    if (authors.find(a => a.id === tweet.author.id)) {
-      return authors
+    const authorIndex = authors.findIndex(a => a.id === tweet.author.id)
+    if (authorIndex > -1) { // author exists
+      authors[authorIndex] = {
+        ...authors[authorIndex],
+        sentiments: [
+          ...authors[authorIndex].sentiments,
+          tweet.sentiment,
+        ]
+      }
     }
     return [
       ...authors,
-      tweet.author,
+      {
+        ...tweet.author,
+        sentiments: [ tweet.sentiment ],
+      }
     ]
   }, [])
   
@@ -117,6 +127,7 @@ const analyze = async () => {
   const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
     author: a_i,
     rank: InfRank(a_i),
+    avgSentiment: a_i.sentiments.reduce((sum, i) => sum + i, 0) / a_i.sentiments.length
   }))
   
   let authorRanks = [ initialAuthorRanks ] // k = 0
@@ -153,9 +164,13 @@ const analyze = async () => {
         author: a_i,
         rank: dampedResult.rank / previousAuthorResults.reduce((sum, ar) => sum + ar.rank, 0)
       }
+
       currentAuthorRanks = [
         ...currentAuthorRanks,
-        normalizedResult,
+        {
+          ...normalizedResult,
+          avgSentiment: previousAuthorRank.avgSentiment,
+        },
       ]
     })
   
