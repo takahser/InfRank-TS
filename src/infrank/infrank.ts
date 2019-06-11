@@ -202,6 +202,7 @@ const analyze = async () => {
   const authorsWithoutId = authorRanks[authorRanks.length - 1].map(ar => ({
     rank: ar.rank,
     author: ar.author.nickname,
+    avgSentiment: ar.avgSentiment,
     isOrganisation: allAuthors.find(a => a.userName === ar.author.nickname).isOrg === '1'
   }))
   const organizationalAuthorsWithoutId = authorsWithoutId.filter(a => a.isOrganisation)
