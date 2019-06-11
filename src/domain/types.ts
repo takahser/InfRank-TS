@@ -12,6 +12,7 @@ export enum AssociationType {
 export interface Author {
   id: string,
   nickname: string,
+  followers: number,
   sentiments: number[],
 }
 
@@ -25,6 +26,7 @@ export interface Tweet {
   id: string,
   author: Author,
   sentiment: number,
+  authorFollowers: number,
   retweeter: Author[], // retweeter := all author that retweeted >= 1 tweet of the author
 }
 

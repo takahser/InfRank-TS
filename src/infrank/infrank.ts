@@ -37,6 +37,7 @@ const analyze = async () => {
         nickname: ot.author,
       },
       sentiment: ot.sentiment,
+      authorFollowers: ot.author_followers,
       retweeter: retweets
         .filter(r => r.rawTweet.retweeted_status.id_str === ot.rawTweet.id_str)
         .map(r => ({
@@ -74,6 +75,7 @@ const analyze = async () => {
       {
         ...tweet.author,
         sentiments: [ tweet.sentiment ],
+        followers: tweet.authorFollowers
       }
     ]
   }, [])
@@ -100,7 +102,7 @@ const analyze = async () => {
         )
       )
   
-  const P = (author: Author) => I(author, AssociationType.Retweeting).length
+  const P = (author: Author) => author.followers // I(author, AssociationType.Retweeting).length
   
   const InfRank = (author: Author) => P(author) / authors.length
   
