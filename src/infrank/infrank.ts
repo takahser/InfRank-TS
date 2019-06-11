@@ -69,6 +69,7 @@ const analyze = async () => {
           tweet.sentiment,
         ]
       }
+      return authors
     }
     return [
       ...authors,
