@@ -211,6 +211,11 @@ const analyze = async () => {
     if (err) console.error(err);
   })
 
+  const retweetEdgeFile = './out/retweet-edges.json'
+  jsonfile.writeFile(retweetEdgeFile, retweetEdges.map(x => ({ retweeter: x.source.id, author: x.target.id })), err => {
+    if (err) console.error(err);
+  })
+
   mongoClient.close()
 }
 
