@@ -121,7 +121,7 @@ const analyze = async () => {
       // avoid illegal division by 0
       // TODO: sync with paper
       return o > 0
-        ? sum + w_r(a_j, a_i) * previousRank / O(a_j, AssociationType.Retweeting).length
+        ? sum + w_r(a_j, a_i) * previousRank / o
         : sum
     }, 0)
   
