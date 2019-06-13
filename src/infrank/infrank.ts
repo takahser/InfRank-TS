@@ -129,6 +129,9 @@ const analyze = async () => {
 
   const preprocessedResults = authors.map(a => ({
     authorId: a.id,
+
+    // init without using d (a.k.a. d = 0)
+    // k = 0
     rank: {
       author: a,
       rank: InfRank(a),
@@ -138,20 +141,18 @@ const analyze = async () => {
     retweetO: O(a, AssociationType.Retweeting),
   }))
 
-  // preprocessing
 
-  // init without using d (a.k.a. d = 0)
-  // k = 0
   const initialAuthorRanks: AuthorRank[] = preprocessedResults.map(r => r.rank)
   
   let authorRanks = [ initialAuthorRanks ] // k = 0
-  
+
+  /**
+   * 5. iterate until convergence reached
+   */
   let convergence = false
   
   let kMax = 1 // max nr of rounds/iterations
   let k = 0
-  
-
   while (!convergence && k < kMax - 1) {
     k++
   
