@@ -107,12 +107,31 @@ const analyze = async () => {
   
   const InfRank = (author: Author) => P(author) / authors.length
   
-  const w_r = (a_i: Author, a_j: Author) =>
-    T(a_i)
+  let wRCache: any[] = []
+  const w_r = (a_i: Author, a_j: Author) => {
+
+    const cachedResult = wRCache.find(c => c.iId === a_i.id && c.jId === a_j.id)
+    if (cachedResult) {
+      return cachedResult.result
+    }
+
+    const result = T(a_i)
       .filter(
         t => R(a_j).find(r => r.id === t.id)
       )
     .length / T(a_i).length
+
+    wRCache = [
+      ...wRCache,
+      {
+        iId: a_i.id,
+        jId: a_j.id,
+        result: result
+      }
+    ]
+
+    return result
+  }
   
   const w_r_sum = (a_i: Author, previousRank: number, i: Author[], o: Author[]) => i
     .reduce((sum, a_j) => {
