@@ -114,24 +114,35 @@ const analyze = async () => {
       )
     .length / T(a_i).length
   
-  const w_r_sum = (a_i: Author, previousRank: number) => I(a_i, AssociationType.Retweeting)
+  const w_r_sum = (a_i: Author, previousRank: number, i: Author[], o: Author[]) => i
     .reduce((sum, a_j) => {
-      const o = O(a_j, AssociationType.Retweeting).length
   
       // avoid illegal division by 0
-      // TODO: sync with paper
-      return o > 0
-        ? sum + w_r(a_j, a_i) * previousRank / o
+      return o.length > 0
+        ? sum + w_r(a_j, a_i) * previousRank / o.length
         : sum
     }, 0)
   
-  // without using d (a.k.a. d = 0)
-  // k = 0
-  const initialAuthorRanks: AuthorRank[] = authors.map(a_i => ({
-    author: a_i,
-    rank: InfRank(a_i),
-    avgSentiment: a_i.sentiments.reduce((sum, i) => sum + i, 0) / a_i.sentiments.length
+  /**
+   * 4. preprocessing
+   */
+
+  const preprocessedResults = authors.map(a => ({
+    authorId: a.id,
+    rank: {
+      author: a,
+      rank: InfRank(a),
+      avgSentiment: a.sentiments.reduce((sum, i) => sum + i, 0) / a.sentiments.length,
+    },
+    retweetI: I(a, AssociationType.Retweeting),
+    retweetO: O(a, AssociationType.Retweeting),
   }))
+
+  // preprocessing
+
+  // init without using d (a.k.a. d = 0)
+  // k = 0
+  const initialAuthorRanks: AuthorRank[] = preprocessedResults.map(r => r.rank)
   
   let authorRanks = [ initialAuthorRanks ] // k = 0
   
@@ -140,9 +151,7 @@ const analyze = async () => {
   let kMax = 1 // max nr of rounds/iterations
   let k = 0
   
-  /**
-   * 4. run infrank
-   */
+
   while (!convergence && k < kMax - 1) {
     k++
   
@@ -157,9 +166,16 @@ const analyze = async () => {
         return; // shouldn't happen
       }
   
+      const preprocessedResult = preprocessedResults.find(r => r.authorId === a_i.id)
+
+      if (!preprocessedResult) { return } // shouldn't happen
+
+      const i = preprocessedResult.retweetI
+      const o = preprocessedResult.retweetO
+
       const dampedResult = {
         author: a_i,
-        rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank)
+        rank: (1-d) * P(a_i,) / authors.length * w_r_sum(a_i, previousAuthorRank.rank, i, o)
       }
   
       // normalization
